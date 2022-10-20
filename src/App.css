@@ -2,19 +2,10 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
 .App-header {
   background-color: #282c34;
+  background-image: url(../src/images/25501.jpg);
+  background-size: cover;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -24,15 +15,53 @@
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.title {
+  font-family: "Caveat", cursive;
+  font-size: 64px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.main-weather {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 90%;
+  height: 100%;
+  padding: 20px;
+  border-radius: 25px;
+  background-color: #ffffff90;
+}
+
+.temp-display {
+  font-size: 6rem;
+  color: white;
+}
+
+#condition {
+  font-size: 2rem;
+}
+
+#search-bar {
+  margin: 20px;
+}
+
+.location-display {
+  font-size: 3rem;
+}
+
+.weather-details {
+  background-color: #282c3440;
+  border-radius: 25px;
+  width: 90%;
+  padding: 20px;
+  line-height: 200%;
+}
+
+#search-bar {
+  width: 90%;
+}
+
+.weather-icons {
+  font-size: 6rem;
+  color: yellow;
 }
