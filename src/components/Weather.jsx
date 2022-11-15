@@ -7,15 +7,22 @@ export const Weather = (props) => {
   let [windSpeed, setWindSpeed] = useState(0);
   let [windDirection, setWindDirection] = useState("");
   let [location, setLocation] = useState("");
+  let [country, setCountry] = useState("");
+  let [region, setRegion] = useState("");
+  let [isLoading, setIsLoading] = useState(true);
 
   const reset = () => {
     {
-      setTemp(0);
+      setTemp("");
       setCity("");
       setConditions("");
       setWindSpeed(0);
       setWindDirection("");
       setLocation("");
+      setRegion("");
+      setLocation("");
+      setCountry("");
+      setIsLoading(true);
     }
   };
 
@@ -41,65 +48,90 @@ export const Weather = (props) => {
           setWindSpeed(response.current.wind_mph);
           setWindDirection(response.current.wind_dir);
           setLocation(response.location.name);
+          setCountry(response.location.country);
+          setRegion(response.location.region);
         })
         .catch((err) => console.error(err));
+      setIsLoading(false);
     }
   };
 
   const renderWeatherIcon = () => {
-    switch (conditions) {
-      case conditions.includes("Sun"):
-        return <i class="fa-solid fa-sun"></i>;
-        break;
-      case conditions.includes("cloud"):
-        return <i class="fa-solid fa-cloud" style={{ color: "white" }}></i>;
-        break;
-      case conditions.includes("Clear"):
-        return <i class="fa-solid fa-sun" style={{ color: "white" }}></i>;
-        break;
-      default:
-        return;
+    if (conditions.includes("Clear") || conditions.includes("Sunny")) {
+      return <i className="fa solid fa-sun" />;
+    } else if (
+      conditions.includes("Overcast") ||
+      conditions.includes("cloud")
+    ) {
+      return <i className="fa-solid fa-cloud" style={{ color: "white" }}></i>;
+    } else if (conditions.includes("rain")) {
+      return (
+        <i className="fa-solid fa-cloud-rain" style={{ color: "white" }}></i>
+      );
+    } else if (conditions.includes("Mist")) {
+      return <i className="fa-solid fa-smog" style={{ color: "white" }}></i>;
+    } else if (conditions.includes("Freezing") || conditions.includes("Ice")) {
+      return (
+        <i className="fa-solid fa-snowflake" style={{ color: "white" }}></i>
+      );
     }
   };
 
   return (
     <>
-      <input
-        id="search-bar"
-        type="text"
-        placeholder="Search City Name"
-        onChange={(e) => setCity(e.target.value)}
-        value={city}
-        onKeyPress={fetchTemp}
-      ></input>
-      <div className="location-display">{city.length > 3 ? location : ""}</div>
-      <div className="weather-icons">
-        {/* {renderWeatherIcon()} */}
-        {conditions.includes("Sunny") ? (
-          <i class="fa-solid fa-sun"></i>
-        ) : "" || conditions.includes("cloud") ? (
-          <i class="fa-solid fa-cloud" style={{ color: "white" }}></i>
-        ) : (
-          ""
-        )}
-      </div>
-      <div className="temp-display">{windSpeed > 1 ? `${temp}°` : ""}</div>
-
-      <div className="weather-details">
-        <div>{city.length > 3 ? conditions : ""}</div>
-        <div>
-          <i className="fa-solid fa-wind"></i>{" "}
-          {city.length > 3 ? `${windSpeed} mph` : ""}
+      {isLoading ? (
+        <input
+          id="search-bar"
+          type="text"
+          placeholder="Search City Name"
+          onChange={(e) => setCity(e.target.value)}
+          value={city}
+          onKeyPress={fetchTemp}
+        ></input>
+      ) : (
+        ""
+      )}
+      {!isLoading ? (
+        <div className="location-display">
+          {!isLoading ? `${location.toUpperCase()}` : ""}
+          <div className="region">{!isLoading ? `${region}` : ""}</div>
+          <div className="country">{!isLoading ? `${country}` : ""}</div>
         </div>
-        <div>
-          <i className="fa-solid fa-compass"></i>
-          {city ? windDirection : ""}
-        </div>
+      ) : (
+        ""
+      )}
 
-        <button className="btn btn-primary" onClick={reset}>
-          Reset
-        </button>
+      <div className="weather-icons">{renderWeatherIcon()}</div>
+
+      <div className="temp-display">
+        {!isLoading ? `${Math.round(temp)}°c` : ""}
       </div>
+
+      {!isLoading ? (
+        <div className="weather-details">
+          <div className="conditions-details">
+            {!isLoading ? conditions : ""}
+          </div>
+          <hr />
+          <div className="wind-info-container">
+            <div className="wind-info">
+              {!isLoading ? <i className="fa-solid fa-wind"></i> : ""}
+              {!isLoading ? `${windSpeed} mph` : ""}
+              {!isLoading ? <i className="fa-solid fa-compass"></i> : ""}
+              {!isLoading ? windDirection : ""}
+            </div>
+          </div>
+          {!isLoading ? (
+            <button className="btn btn-primary" onClick={reset}>
+              Reset
+            </button>
+          ) : (
+            ""
+          )}
+        </div>
+      ) : (
+        ""
+      )}
     </>
   );
 };
